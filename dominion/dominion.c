@@ -1216,7 +1216,8 @@ int smithyCard(int currentPlayer, int handPos, struct gameState *state){
   //+3 Cards
   int i;
 
-  for (i = 0; i < 3; i++)
+  //Bug #1 -> incorrect indexing
+  for (i = 0; i < 4; i++)
   {
     drawCard(currentPlayer, state);
   }
@@ -1233,7 +1234,8 @@ int adventurerCard(int currentPlayer, int handPos, struct gameState *state){
   int temphand[MAX_HAND];
   int cardDrawn;
 
-  while(drawntreasure<2){
+/* bug #2 -> (< 2) changed to (== 2) */ 
+  while(drawntreasure < 2){
     if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
       shuffle(currentPlayer, state);
     }
@@ -1241,7 +1243,8 @@ int adventurerCard(int currentPlayer, int handPos, struct gameState *state){
     drawCard(currentPlayer, state);
     cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
   
-    if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold){
+    /* bug #2 - changed "or" to "and" */
+    if (cardDrawn == copper && cardDrawn == silver && cardDrawn == gold){
       drawntreasure++;
     }
     else{
@@ -1249,8 +1252,7 @@ int adventurerCard(int currentPlayer, int handPos, struct gameState *state){
       state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
       z++;
     }
-  }
-      
+  }   
   while(z-1>=0){
     state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
     z=z-1;
@@ -1283,6 +1285,7 @@ int tributeCard(int currentPlayer, int nextPlayer, struct gameState *state){
       
   else{
     if (state->deckCount[nextPlayer] == 0){
+      /* bug #4 - indexing. ++i now = i++. Except reverse those two. */
       for (i = 0; i < state->discardCount[nextPlayer]; i++){
         state->deck[nextPlayer][i] = state->discard[nextPlayer][i];//Move to deck
         state->deckCount[nextPlayer]++;
@@ -1365,7 +1368,8 @@ int mineCard(int currentPlayer, int handPos, int choice1, int choice2, struct ga
   //discard trashed card
   for (i = 0; i < state->handCount[currentPlayer]; i++)
   {
-    if (state->hand[currentPlayer][i] == j)
+    /* bug #3 - changed (== j) to (<= j) */
+    if (state->hand[currentPlayer][i] <= j)
     {
       discardCard(i, currentPlayer, state, 0);      
       break;
