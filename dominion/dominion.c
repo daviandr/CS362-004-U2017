@@ -750,40 +750,9 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     case gardens:
       return -1;
       
+    /* REFACTOR #5 - MOVE TO SEPARATE FUNCTION */  
     case mine:
-      j = state->hand[currentPlayer][choice1];  //store card we will trash
-
-      if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold)
-  {
-    return -1;
-  }
-    
-      if (choice2 > treasure_map || choice2 < curse)
-  {
-    return -1;
-  }
-
-      if ( (getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2) )
-  {
-    return -1;
-  }
-
-      gainCard(choice2, state, 2, currentPlayer);
-
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
-
-      //discard trashed card
-      for (i = 0; i < state->handCount[currentPlayer]; i++)
-  {
-    if (state->hand[currentPlayer][i] == j)
-      {
-        discardCard(i, currentPlayer, state, 0);      
-        break;
-      }
-  }
-      
-      return 0;
+      mineCard(currentPlayer, handPos, choice1, choice2, state);
       
     case remodel:
       j = state->hand[currentPlayer][choice1];  //store card we will trash
@@ -815,17 +784,10 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     case smithy:
       smithyCard(currentPlayer, handPos, state);
     
+    /* REFACTOR #4 - MAKE OWN FUNCTION */
     case village:
-      //+1 Card
-      drawCard(currentPlayer, state);
-      
-      //+2 Actions
-      state->numActions = state->numActions + 2;
-      
-      //discard played card from hand
-      discardCard(handPos, currentPlayer, state, 0);
-      return 0;
-    
+      villageCard(currentPlayer, handPos, state);
+
     case baron:
       state->numBuys++;//Increase buys by 1!
       if (choice1 > 0){//Boolean true or going to discard an estate
@@ -962,9 +924,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     
     /* REFACTOR #3 - TURN TO FUNCTION */
     case tribute:
-      tributeCard();
+      tributeCard(currentPlayer, nextPlayer, state);
 
-    
     case ambassador:
       j = 0;    //used to check if player has enough cards to discard
 
@@ -1249,6 +1210,8 @@ int updateCoins(int player, struct gameState *state, int bonus)
 }
 
 /* REFACTORS - ASSIGNMENT #2 */
+
+/* Number 1 */
 int smithyCard(int currentPlayer, int handPos, struct gameState *state){
   //+3 Cards
   int i;
@@ -1263,6 +1226,7 @@ int smithyCard(int currentPlayer, int handPos, struct gameState *state){
   return 0;
 }
 
+/* Number 2 */
 int adventurerCard(int currentPlayer, int handPos, struct gameState *state){
   int z = 0;
   int drawntreasure = 0;
@@ -1295,7 +1259,8 @@ int adventurerCard(int currentPlayer, int handPos, struct gameState *state){
   return 0;
 }
 
-int tributeCard(){
+/* Number 3 */
+int tributeCard(int currentPlayer, int nextPlayer, struct gameState *state){
   int tributeRevealedCards[2] = {-1, -1};
   int i;
 
@@ -1353,6 +1318,60 @@ int tributeCard(){
     }
   }
 
+  return 0;
+}
+
+/* Number 4 */
+int villageCard(int currentPlayer, int handPos, struct gameState *state){
+  //+1 Card
+  drawCard(currentPlayer, state);
+      
+  //+2 Actions
+  state->numActions = state->numActions + 2;
+      
+  //discard played card from hand
+  discardCard(handPos, currentPlayer, state, 0);
+
+  return 0;
+}
+
+/* Number 5 */
+int mineCard(int currentPlayer, int handPos, int choice1, int choice2, struct gameState *state){
+  int i, j;
+
+
+  j = state->hand[currentPlayer][choice1];  //store card we will trash
+
+  if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold)
+  {
+    return -1;
+  }
+    
+  if (choice2 > treasure_map || choice2 < curse)
+  {
+    return -1;
+  }
+
+  if ( (getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2) )
+  {
+    return -1;
+  }
+
+  gainCard(choice2, state, 2, currentPlayer);
+
+  //discard card from hand
+  discardCard(handPos, currentPlayer, state, 0);
+
+  //discard trashed card
+  for (i = 0; i < state->handCount[currentPlayer]; i++)
+  {
+    if (state->hand[currentPlayer][i] == j)
+    {
+      discardCard(i, currentPlayer, state, 0);      
+      break;
+    }
+  }
+      
   return 0;
 }
 
