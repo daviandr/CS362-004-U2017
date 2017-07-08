@@ -836,8 +836,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       state->coins += 4;//Add 4 coins to the amount of coins
       state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
       state->discardCount[currentPlayer]++;
-      for (;p < state->handCount[currentPlayer]; p++){
-        state->hand[currentPlayer][p] = state->hand[currentPlayer][p+1];
+      for (;p < state->handCount[currentPlayer]; p++){        state->hand[currentPlayer][p] = state->hand[currentPlayer][p+1];
       }
       state->hand[currentPlayer][state->handCount[currentPlayer]] = -1;
       state->handCount[currentPlayer]--;
@@ -847,6 +846,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       if(DEBUG) {
         printf("No estate cards in your hand, invalid choice\n");
         printf("Must gain an estate if there are any\n");
+
       }
       if (supplyCount(estate, state) > 0){
         gainCard(estate, state, 0, currentPlayer);
@@ -934,10 +934,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       }
         }
     }
-      }
-        
-  }
-      return 0;
+      }        
+  }      return 0;
     
     case steward:
       if (choice1 == 1)
@@ -965,6 +963,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     /* REFACTOR #3 - TURN TO FUNCTION */
     case tribute:
       tributeCard();
+
+    
     case ambassador:
       j = 0;    //used to check if player has enough cards to discard
 
@@ -1355,4 +1355,5 @@ int tributeCard(){
 
   return 0;
 }
+
 //end of dominion.c
