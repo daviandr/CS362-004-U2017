@@ -12,8 +12,6 @@ int main (int argc, char** argv) {
 
   initializeGame(2, k, atoi(argv[1]), &G);
 
-printf("\n\n---seed: %d---\n\n", atoi(argv[1]));
-
   int money = 0;
   int smithyPos = -1;
   int adventurerPos = -1;
