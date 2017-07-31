@@ -13,14 +13,20 @@
 
 #define TEST_MAX 1//5000
 
-int checkAdventurerCard(int cp, struct gameState *g, int oldHand, int oldDeck, int oldTreasureCount){
+int checkAdventurerCard(int currentPlayer, int handPos, struct gameState *g, int oldHand, int oldDeck, int oldTreasureCount){
 	int n;
 	int newTreasureCount = 0;
 	int sizeDiff;
 
-	printf("\nChecking how many treasure cards in hand after card played\n");
-	printf("deck count: %d\n", g->deckCount[cp]);
-	printf("Hand count: %d\n", g->handCount[cp]);
+/*	printf("\n----Parameters IN CHECK FUNCTION----\n");
+	printf("Number of Players: %d\n", g->numPlayers);
+	printf("Hand Position: %d\n", handPos);
+	printf("Current Player; %d\n", currentPlayer);
+	printf("Hand Count: %d\n", g->handCount[currentPlayer]);
+	printf("Deck Count: %d\n", g->deckCount[currentPlayer]);
+	printf("num treasure before: %d\n", oldTreasureCount);
+*/
+/*	
 	for(n = 0; n < g->handCount[cp]; n++)
 	{
 		printf("N: %d\n", n);
@@ -30,6 +36,7 @@ int checkAdventurerCard(int cp, struct gameState *g, int oldHand, int oldDeck, i
 		}
 	}
 	printf("num treasure after: %d\n", newTreasureCount);
+*/
 /*
 	sizeDiff = newTreasureCount - oldTreasureCount;
 	printf("Treasure Cards After Adventurer Card: %d\n", newTreasureCount);
@@ -48,6 +55,49 @@ int checkAdventurerCard(int cp, struct gameState *g, int oldHand, int oldDeck, i
 */
 	return 0;
 }
+
+int playAdventurerCard(int currentPlayer, int handPos, struct gameState* state){
+	int z = 0; //counter for temphand
+	int temphand[MAX_HAND];// moved above the if statement
+	int drawntreasure=0;
+	int cardDrawn;
+
+		printf("\n----Parameters IN CHECK FUNCTION----\n");
+	printf("Number of Players: %d\n", state->numPlayers);
+	printf("Hand Position: %d\n", handPos);
+	printf("Current Player; %d\n", currentPlayer);
+	printf("Hand Count: %d\n", state->handCount[currentPlayer]);
+	printf("Deck Count: %d\n", state->deckCount[currentPlayer]);
+	//printf("num treasure before: %d\n", oldTreasureCount);
+    
+    while(drawntreasure<2)
+    {
+		if (state->deckCount[currentPlayer] <1)
+		{	//if the deck is empty we need to shuffle discard and add to deck
+			shuffle(currentPlayer, state);
+		}
+		drawCard(currentPlayer, state);
+		cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
+		if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+		{
+	  		drawntreasure++;
+		}
+		else{
+	  		temphand[z]=cardDrawn;
+	  		state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
+	  		z++;
+		}
+    }
+    
+    while(z-1>=0)
+    {
+		state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
+		z=z-1;
+    }
+    
+    return 0;
+}
+
 
 int main(){
 	int n;
@@ -77,10 +127,10 @@ int main(){
 		printf("\n-*-*-*-*-TEST NUMBER (%d)-*-*-*-*-\n", n + 1);
 
 		gameSeed = rand();		//generate a random see to initialize new game
-		numPlayers = rand() % 2;	//pick random number of players, between 0 - MAX_PLAYERS
+		numPlayers = (rand() % (3 - 1) + 1);	//pick random number of players, between 0 - MAX_PLAYERS
 		bonus = 0;		//for cardEffect() function
 		handPos = rand() % 4; 	//generte random handPos in standard sized hand
-		currentPlayer = rand() % 2;	//pick a random player, based on the number of players from above
+		currentPlayer = (rand() % (3 - 1) + 1);	//pick a random player, based on the number of players from above
 
 
 		initializeGame(numPlayers, k, gameSeed, &g);
@@ -88,6 +138,7 @@ int main(){
 		g.handCount[currentPlayer] = (rand() % (5 - 1) + 1);
 		g.deckCount[currentPlayer] = rand() % MAX_DECK;
 		g.discardCount[currentPlayer] = rand() % MAX_DECK;
+		g.numPlayers = numPlayers;
 
 		handCountCheck = g.handCount[currentPlayer];
 		deckCountCheck = g.deckCount[currentPlayer];
@@ -116,9 +167,16 @@ printf("hand size: %d\n", handCountCheck);
 				numTreasureBefore++;
 			}
 		}
+		printf("\n----Parameters for Test----\n");
+		printf("Number of Players: %d\n", numPlayers);
+		printf("Hand Position: %d\n", handPos);
+		printf("Current Player; %d\n", currentPlayer);
+		printf("Hand Count: %d\n", handCountCheck);
+		printf("Deck Count: %d\n", deckCountCheck);
 		printf("num treasure before: %d\n", numTreasureBefore);
-		playAdventurer(currentPlayer, handPos, &g);
-		checkAdventurerCard(currentPlayer, &g, handCountCheck, deckCountCheck, numTreasureBefore);
+
+		playAdventurerCard(currentPlayer, handPos, &g);
+		checkAdventurerCard(currentPlayer, handPos, &g, handCountCheck, deckCountCheck, numTreasureBefore);
 
 	}	
 

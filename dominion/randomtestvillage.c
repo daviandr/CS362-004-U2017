@@ -9,19 +9,43 @@
 #include "dominion.h"
 #include "dominion_helpers.h"
 
-#define TEST_MAX 1
+#define TEST_MAX 1000
+#define MAX_ACTIONS 10
 
-int checkAdventurerCard(int cp, struct gameState *g, int oldHand, int oldDeck){
+int checkVillageCard(int currentPlayer, struct gameState *g, int oldHand, int oldDeck, int oldActions){
 	int sizeDiff;
 
-// For Debugging
+/* For Debugging
+	printf("\nIn check village card function\n");
 	printf("state handsize: %d\n", g->handCount[cp]);
 	printf("state decksize: %d\n", g->deckCount[cp]);
+	printf("state actions: %d\n", g->numActions);
 
 	printf("old handsize: %d\n", oldHand);
 	printf("old decksize: %d\n", oldDeck);
+	printf("old actions: %d\n", numberActions);
+*/
 
+	printf("\n-----Entering Check Phase-----\n");
 
+	//first, check hand size. New hand should be +1 than old hand
+	sizeDiff = g->handCount[currentPlayer] - oldHand;
+	printf("After Village Card Hand Count: %d\n", g->handCount[currentPlayer]);
+	printf("Old Hand Count: %d\n", oldHand);
+	printf("Size Difference: %d\n\n", sizeDiff);
+	assert(sizeDiff == 0);
+	//second, check deck size. New deck should be 1 less than old
+	sizeDiff = oldDeck - g->deckCount[currentPlayer];
+	printf("After Village Card Deck Count: %d\n", g->deckCount[currentPlayer]);
+	printf("Old Deck Count: %d\n", oldDeck);
+	printf("Size Difference: %d\n\n", sizeDiff);
+	assert(sizeDiff == 1);
+	//third, check number of actions New actions should be +2 than old actions
+	sizeDiff = g->numActions - oldActions;
+	printf("After Village Card Action Count: %d\n", g->numActions);
+	printf("Old Action Count: %d\n", oldActions);
+	printf("Size Difference: %d\n\n", sizeDiff);
+	assert(sizeDiff == 2);
 /*
 	printf("\n-----Entering Test-----\n");
 	//First, new handsize(handsize in struct g) should be 2 > than oldHand.
@@ -37,31 +61,9 @@ int checkAdventurerCard(int cp, struct gameState *g, int oldHand, int oldDeck){
 	printf("Size Difference: %d\n\n", sizeDiff);
 	assert(sizeDiff == 3);
 */
-
-/*
-	printf("\n-----Checking size of hand-----\n");
-	printf("Size of hand before smithy() call: %d\n", oldHand);
-	printf("Size of hand after smithy() call: %d\n", g->handCount[cp]);
-	if(g->handCount[cp] <= oldHand)
-	{
-		printf("Error: Before should be < after\n");
-		assert(g->handCount[cp] <= oldHand);
-	}
-
-	printf("\n-----Checking size of deck-----\n");
-	printf("Size of deck before smithy() call: %d\n", oldDeck);
-	printf("Size of deck after smithy() call: %d\n", g->deckCount[cp]);
-	sizeDiff = g->deckCount[cp] - oldDeck;
-	if(sizeDiff > 3 || sizeDiff < 3)
-	{
-		printf("Error: size of deck before should be 3 less than size of deck after\n");
-		assert(sizeDiff > 3 || sizeDiff < 3);
-	}
-*/
 }
 
 int main(){
-	int r;
 	int i;
 	int bonus;
 	int handPos;
@@ -70,6 +72,7 @@ int main(){
 	int currentPlayer;
 	int handCountCheck;
 	int deckCountCheck;
+	int numberActions = 1;
 	int discardCountCheck;
 	int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse, sea_hag, tribute, smithy};
 
@@ -78,7 +81,7 @@ int main(){
 	srand(time(NULL));
 
 	for(i = 0; i < TEST_MAX; i++)
-	{	
+	{
 		printf("\n-*-*-*-*-TEST NUMBER (%d)-*-*-*-*-\n", i + 1);
 
 		gameSeed = rand();		//generate a random see to initialize new game
@@ -97,35 +100,37 @@ int main(){
 
 		initializeGame(numPlayers, k, gameSeed, &g);
 
-		g.handCount[currentPlayer] = rand() % MAX_HAND;
+		g.handCount[currentPlayer] = rand() % (5 - 1) + 1;
 		g.deckCount[currentPlayer] = rand() % MAX_DECK;
+		g.numActions = 1;
 
 		handCountCheck = g.handCount[currentPlayer];
 		deckCountCheck = g.deckCount[currentPlayer];
 
+/* For Debugging
 		printf("\n----Parameters for Test----\n");
 		printf("Number of Players: %d\n", numPlayers);
 		printf("Hand Position: %d\n", handPos);
 		printf("Current Player; %d\n", currentPlayer);
 		printf("Hand Count: %d\n", handCountCheck);
 		printf("Deck Count: %d\n", deckCountCheck);
+		printf("Number of Actions: %d\n", numberActions);
+*/
 
 /*For Debugging
 		printf("old handcount: %d\n", handCountCheck);
 		printf("old deckcount: %d\n", deckCountCheck);
 */
-		if(deckCountCheck < 3)
-		{
-			printf("\nNot enough cards to draw\n");
-			shuffle(currentPlayer, &g);
-		}
-		else
-		{
-		playAdventurer(currentPlayer, handPos, &g);
-			//cardEffect(smithy, 1, 1, 1, &g, handPos, &bonus);
-			checkAdventurerCard(currentPlayer, &g, handCountCheck, deckCountCheck);
-		}
+		playVillage(currentPlayer, handPos, &g);
+		checkVillageCard(currentPlayer, &g, handCountCheck, deckCountCheck, numberActions);
 	}
 
 	return 0;
 }
+
+
+
+
+
+
+

@@ -1206,10 +1206,10 @@ int updateCoins(int player, struct gameState *state, int bonus)
 }
 
 /*Refactor #1 - Village Card*/
-int playVillage(int currentPlayer, int handPos, struct gameState* state){
+int playVillage(int currentPlayer, int handPos, struct gameState *state){
     //+1 Card
     drawCard(currentPlayer, state);
-			
+
     //+2 Actions
     state->numActions = state->numActions + 2;
 			

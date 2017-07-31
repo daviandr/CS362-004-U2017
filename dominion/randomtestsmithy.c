@@ -9,9 +9,9 @@
 #include "dominion.h"
 #include "dominion_helpers.h"
 
-#define TEST_MAX 10000
+#define TEST_MAX 1000
 
-int checkSmithyCard(int cp, struct gameState *g, int oldHand, int oldDeck, int oldDiscard){
+int checkSmithyCard(int cp, struct gameState *g, int oldHand, int oldDeck){
 	int sizeDiff;
 
 /* For Debugging
@@ -37,12 +37,7 @@ int checkSmithyCard(int cp, struct gameState *g, int oldHand, int oldDeck, int o
 	printf("Old Deck Count: %d\n", oldDeck);
 	printf("Size Difference: %d\n\n", sizeDiff);
 	assert(sizeDiff == 3);
-	//Third, After Smithy Card discard(discard in struct g) should be 1 > than oldDiscard.
-	sizeDiff = g->discardCount[cp] - oldDiscard;
-	printf("After Smithy Card Discard Count: %d\n", g->discardCount[cp]);
-	printf("Old Discard Count: %d\n", oldDiscard);
-	printf("Size Difference: %d\n\n", sizeDiff);
-	assert(sizeDiff == 0);
+
 
 /*
 	printf("\n-----Checking size of hand-----\n");
@@ -68,10 +63,10 @@ int checkSmithyCard(int cp, struct gameState *g, int oldHand, int oldDeck, int o
 
 int main(){
 	int i;
-	int gameSeed;
-	int numPlayers;
 	int bonus;
 	int handPos;
+	int gameSeed;
+	int numPlayers;
 	int currentPlayer;
 	int handCountCheck;
 	int deckCountCheck;
@@ -83,16 +78,15 @@ int main(){
 	srand(time(NULL));
 
 	for(i = 0; i < TEST_MAX; i++)
-	{
+	{	
 		printf("\n-*-*-*-*-TEST NUMBER (%d)-*-*-*-*-\n", i + 1);
 
 		gameSeed = rand();		//generate a random see to initialize new game
-		//printf("\nRandom Seed: %d\n", gameSeed);
-
-		numPlayers = rand() % 2;	//pick random number of players, between 0 - MAX_PLAYERS
+		//printf("\nRandom Seed: %d\	n", gameSeed);
+		numPlayers = (rand() % (3 - 1) + 1);	//pick random number of players, between 0 - MAX_PLAYERS
 		bonus = 0;		//for cardEffect() function
 		handPos = rand() % 4; 	//generte random handPos in standard sized hand
-		currentPlayer = rand() % (MAX_PLAYERS - 2) + 2;	//pick a random player, based on the number of players from above
+		currentPlayer = (rand() % (3 - 1) + 1);	//pick a random player, based on the number of players from above
 
 /*For Debugging
 		printf("Gameseed: %d\n", gameSeed);
@@ -105,11 +99,9 @@ int main(){
 
 		g.handCount[currentPlayer] = rand() % MAX_HAND;
 		g.deckCount[currentPlayer] = rand() % MAX_DECK;
-		g.discardCount[currentPlayer] = rand() % MAX_DECK;
 
 		handCountCheck = g.handCount[currentPlayer];
 		deckCountCheck = g.deckCount[currentPlayer];
-		discardCountCheck = g.discardCount[currentPlayer];
 
 		printf("\n----Parameters for Test----\n");
 		printf("Number of Players: %d\n", numPlayers);
@@ -117,24 +109,21 @@ int main(){
 		printf("Current Player; %d\n", currentPlayer);
 		printf("Hand Count: %d\n", handCountCheck);
 		printf("Deck Count: %d\n", deckCountCheck);
-		printf("Discard Count: %d\n", discardCountCheck);
 
 /*For Debugging
 		printf("old handcount: %d\n", handCountCheck);
 		printf("old deckcount: %d\n", deckCountCheck);
-		printf("old discardCount: %d\n", discardCountCheck);
 */
 		if(deckCountCheck < 3)
 		{
 			printf("\nNot enough cards to draw\n");
 			shuffle(currentPlayer, &g);
-			getchar();
 		}
 		else
 		{
 			playSmithy(currentPlayer, handPos, &g);
 			//cardEffect(smithy, 1, 1, 1, &g, handPos, &bonus);
-			checkSmithyCard(currentPlayer, &g, handCountCheck, deckCountCheck, discardCountCheck);
+			checkSmithyCard(currentPlayer, &g, handCountCheck, deckCountCheck);
 		}
 	}
 

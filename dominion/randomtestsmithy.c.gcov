@@ -1,0 +1,190 @@
+        -:    0:Source:randomtestsmithy.c
+        -:    0:Programs:2
+        -:    1:/*
+        -:    2:
+        -:    3: */
+        -:    4:
+        -:    5:#include <stdio.h>
+        -:    6:#include <stdlib.h>
+        -:    7:#include <assert.h>
+        -:    8:#include <math.h>
+        -:    9:#include "dominion.h"
+        -:   10:#include "dominion_helpers.h"
+        -:   11:
+        -:   12:#define TEST_MAX 1
+        -:   13:
+function checkSmithyCard called 3 returned 100% blocks executed 82%
+        3:   14:int checkSmithyCard(int cp, struct gameState *g, int oldHand, int oldDeck, int oldDiscard){
+        -:   15:	int sizeDiff;
+        -:   16:
+        -:   17:/* For Debugging
+        -:   18:	printf("state handsize: %d\n", g->handCount[cp]);
+        -:   19:	printf("state decksize: %d\n", g->deckCount[cp]);
+        -:   20:	printf("state discardsize: %d\n", g->discardCount[cp]);
+        -:   21:
+        -:   22:	printf("old handsize: %d\n", oldHand);
+        -:   23:	printf("old decksize: %d\n", oldDeck);
+        -:   24:	printf("old discard: %d\n", oldDiscard);
+        -:   25:*/
+        -:   26:
+        3:   27:	printf("\n-----Entering Test-----\n");
+call    0 returned 3
+        -:   28:	//First, new handsize(handsize in struct g) should be 2 > than oldHand.
+        3:   29:	sizeDiff = g->handCount[cp] - oldHand;
+        3:   30:	printf("After Smithy Card Hand Count: %d\n", g->handCount[cp]);
+call    0 returned 3
+        3:   31:	printf("Old Hand Count: %d\n", oldHand);
+call    0 returned 3
+        3:   32:	printf("Size Difference: %d\n\n", sizeDiff);
+call    0 returned 3
+        3:   33:	assert(sizeDiff == 2);
+branch  0 taken 0 (fallthrough)
+branch  1 taken 3
+call    2 never executed
+        -:   34:	//Second, After Smithy Card decksize(decksize in struct g) should be 3 < than oldDeck.
+        3:   35:	sizeDiff = oldDeck - g->deckCount[cp];
+        3:   36:	printf("After Smithy Card Deck Count: %d\n", g->deckCount[cp]);
+call    0 returned 3
+        3:   37:	printf("Old Deck Count: %d\n", oldDeck);
+call    0 returned 3
+        3:   38:	printf("Size Difference: %d\n\n", sizeDiff);
+call    0 returned 3
+        3:   39:	assert(sizeDiff == 3);
+branch  0 taken 0 (fallthrough)
+branch  1 taken 3
+call    2 never executed
+        -:   40:	//Third, After Smithy Card discard(discard in struct g) should be 1 > than oldDiscard.
+        3:   41:	sizeDiff = g->discardCount[cp] - oldDiscard;
+        3:   42:	printf("After Smithy Card Discard Count: %d\n", g->discardCount[cp]);
+call    0 returned 3
+        3:   43:	printf("Old Discard Count: %d\n", oldDiscard);
+call    0 returned 3
+        3:   44:	printf("Size Difference: %d\n\n", sizeDiff);
+call    0 returned 3
+        3:   45:	assert(sizeDiff == 0);
+branch  0 taken 0 (fallthrough)
+branch  1 taken 3
+call    2 never executed
+        -:   46:
+        -:   47:/*
+        -:   48:	printf("\n-----Checking size of hand-----\n");
+        -:   49:	printf("Size of hand before smithy() call: %d\n", oldHand);
+        -:   50:	printf("Size of hand after smithy() call: %d\n", g->handCount[cp]);
+        -:   51:	if(g->handCount[cp] <= oldHand)
+        -:   52:	{
+        -:   53:		printf("Error: Before should be < after\n");
+        -:   54:		assert(g->handCount[cp] <= oldHand);
+        -:   55:	}
+        -:   56:
+        -:   57:	printf("\n-----Checking size of deck-----\n");
+        -:   58:	printf("Size of deck before smithy() call: %d\n", oldDeck);
+        -:   59:	printf("Size of deck after smithy() call: %d\n", g->deckCount[cp]);
+        -:   60:	sizeDiff = g->deckCount[cp] - oldDeck;
+        -:   61:	if(sizeDiff > 3 || sizeDiff < 3)
+        -:   62:	{
+        -:   63:		printf("Error: size of deck before should be 3 less than size of deck after\n");
+        -:   64:		assert(sizeDiff > 3 || sizeDiff < 3);
+        -:   65:	}
+        -:   66:*/
+        3:   67:}
+        -:   68:
+function main called 3 returned 100% blocks executed 93%
+        3:   69:int main(){
+        -:   70:	int i;
+        -:   71:	int bonus;
+        -:   72:	int handPos;
+        -:   73:	int gameSeed;
+        -:   74:	int numPlayers;
+        -:   75:	int currentPlayer;
+        -:   76:	int handCountCheck;
+        -:   77:	int deckCountCheck;
+        -:   78:	int discardCountCheck;
+        3:   79:	int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse, sea_hag, tribute, smithy};
+        -:   80:
+        -:   81:	struct gameState g;
+        -:   82:
+        3:   83:	srand(time(NULL));
+call    0 returned 3
+call    1 returned 3
+        -:   84:
+        6:   85:	for(i = 0; i < TEST_MAX; i++)
+branch  0 taken 3
+branch  1 taken 3 (fallthrough)
+        -:   86:	{
+        3:   87:		printf("\n-*-*-*-*-TEST NUMBER (%d)-*-*-*-*-\n", i + 1);
+call    0 returned 3
+        -:   88:
+        3:   89:		gameSeed = rand();		//generate a random see to initialize new game
+call    0 returned 3
+        -:   90:		//printf("\nRandom Seed: %d\	n", gameSeed);
+        -:   91:
+        3:   92:		numPlayers = rand() % 2;	//pick random number of players, between 0 - MAX_PLAYERS
+call    0 returned 3
+        3:   93:		bonus = 0;		//for cardEffect() function
+        3:   94:		handPos = rand() % 4; 	//generte random handPos in standard sized hand
+call    0 returned 3
+        3:   95:		currentPlayer = rand() % 2;	//pick a random player, based on the number of players from above
+call    0 returned 3
+        -:   96:
+        -:   97:/*For Debugging
+        -:   98:		printf("Gameseed: %d\n", gameSeed);
+        -:   99:		printf("Number Players: %d\n", numPlayers);
+        -:  100:		printf("Hand Position: %d\n", handPos);
+        -:  101:		printf("Current Player: %d\n", currentPlayer);
+        -:  102:*/
+        -:  103:
+        3:  104:		initializeGame(numPlayers, k, gameSeed, &g);
+call    0 returned 3
+        -:  105:
+        3:  106:		g.handCount[currentPlayer] = rand() % MAX_HAND;
+call    0 returned 3
+        3:  107:		g.deckCount[currentPlayer] = rand() % MAX_DECK;
+call    0 returned 3
+        3:  108:		g.discardCount[currentPlayer] = rand() % MAX_DECK;
+call    0 returned 3
+        -:  109:
+        3:  110:		handCountCheck = g.handCount[currentPlayer];
+        3:  111:		deckCountCheck = g.deckCount[currentPlayer];
+        3:  112:		discardCountCheck = g.discardCount[currentPlayer];
+        -:  113:
+        3:  114:		printf("\n----Parameters for Test----\n");
+call    0 returned 3
+        3:  115:		printf("Number of Players: %d\n", numPlayers);
+call    0 returned 3
+        3:  116:		printf("Hand Position: %d\n", handPos);
+call    0 returned 3
+        3:  117:		printf("Current Player; %d\n", currentPlayer);
+call    0 returned 3
+        3:  118:		printf("Hand Count: %d\n", handCountCheck);
+call    0 returned 3
+        3:  119:		printf("Deck Count: %d\n", deckCountCheck);
+call    0 returned 3
+        3:  120:		printf("Discard Count: %d\n", discardCountCheck);
+call    0 returned 3
+        -:  121:
+        -:  122:/*For Debugging
+        -:  123:		printf("old handcount: %d\n", handCountCheck);
+        -:  124:		printf("old deckcount: %d\n", deckCountCheck);
+        -:  125:		printf("old discardCount: %d\n", discardCountCheck);
+        -:  126:*/
+        3:  127:		if(deckCountCheck < 3)
+branch  0 taken 0 (fallthrough)
+branch  1 taken 3
+        -:  128:		{
+    #####:  129:			printf("\nNot enough cards to draw\n");
+call    0 never executed
+    #####:  130:			shuffle(currentPlayer, &g);
+call    0 never executed
+        -:  131:		}
+        -:  132:		else
+        -:  133:		{
+        3:  134:			playSmithy(currentPlayer, handPos, &g);
+call    0 returned 3
+        -:  135:			//cardEffect(smithy, 1, 1, 1, &g, handPos, &bonus);
+        3:  136:			checkSmithyCard(currentPlayer, &g, handCountCheck, deckCountCheck, discardCountCheck);
+call    0 returned 3
+        -:  137:		}
+        -:  138:	}
+        -:  139:
+        3:  140:	return 0;
+        -:  141:}

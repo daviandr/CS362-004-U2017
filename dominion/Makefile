@@ -33,6 +33,18 @@ runtests: testDrawCard
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
 
+randomtestsmithy.o: randomtestsmithy.c dominion.o rngs.o
+	gcc -o smithy randomtestsmithy.c dominion.c rngs.c -g -lm $(CFLAGS)
+
+randomtestvillage.o: randomtestvillage.c dominion.o rngs.o
+	gcc -o village randomtestvillage.c dominion.c rngs.c -g -lm $(CFLAGS)
+
+smithy: randomtestsmithy.o dominion.o rngs.o
+	gcc -o smithy randomtestsmithy.c dominion.c rngs.c -g -lm $(CFLAGS)
+
+village: randomtestvillage.o dominion.o rngs.o
+	gcc -o village randomtestvillage.c dominion.c rngs.c -g -lm $(CFLAGS)
+
 all: playdom player testDrawCard testBuyCard badTestDrawCard
 
 clean:
