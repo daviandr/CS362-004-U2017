@@ -1,4 +1,4 @@
-/* 
+/*
 
  */
 
@@ -8,145 +8,117 @@
 #include <math.h>
 #include "dominion.h"
 #include "dominion_helpers.h"
-#include <string.h>
-#include <assert.h>
 
-#define TEST_MAX 1//5000
+#define TEST_MAX 100
 
-int checkAdventurerCard(int cp, struct gameState *g, int oldHand, int oldDeck, int oldTreasureCount){
-	int n;
-	int newTreasureCount = 0;
+int checkAdventurerCard(int cp, struct gameState *g, int oldHand, int oldDeck, int oldTreasure){
 	int sizeDiff;
 
-	printf("\nChecking how many treasure cards in hand after card played\n");
-	printf("deck count: %d\n", g->deckCount[cp]);
-	printf("Hand count: %d\n", g->handCount[cp]);
-	for(n = 0; n < g->handCount[cp]; n++)
-	{
-		printf("N: %d\n", n);
-		if(g->hand[cp][n] == 6)
-		{
-			newTreasureCount++;
-		}
-	}
-	printf("num treasure after: %d\n", newTreasureCount);
-/*
-	sizeDiff = newTreasureCount - oldTreasureCount;
-	printf("Treasure Cards After Adventurer Card: %d\n", newTreasureCount);
-	printf("Treasure Cards Before: %d\n", oldTreasureCount);
-	printf("Size Differenc: %d\n\n", sizeDiff);
+// For Debugging
+	printf("state handsize: %d\n", g->handCount[cp]);
+	printf("state decksize: %d\n", g->deckCount[cp]);
 
+	printf("old handsize: %d\n", oldHand);
+	printf("old decksize: %d\n", oldDeck);
+
+
+/*
+	printf("\n-----Entering Test-----\n");
+	//First, new handsize(handsize in struct g) should be 2 > than oldHand.
 	sizeDiff = g->handCount[cp] - oldHand;
-	printf("After Adventurer Hand Count: %d\n", g->handCount[cp]);
+	printf("After Smithy Card Hand Count: %d\n", g->handCount[cp]);
 	printf("Old Hand Count: %d\n", oldHand);
 	printf("Size Difference: %d\n\n", sizeDiff);
-
-	sizeDiff = g->deckCount[cp] - oldDeck;
-	printf("After Adventurer Deck Count: %d\n", g->deckCount[cp]);
+	assert(sizeDiff == 2);
+	//Second, After Smithy Card decksize(decksize in struct g) should be 3 < than oldDeck.
+	sizeDiff = oldDeck - g->deckCount[cp];
+	printf("After Smithy Card Deck Count: %d\n", g->deckCount[cp]);
 	printf("Old Deck Count: %d\n", oldDeck);
-	printf("Size Difference: %d\n", sizeDiff);
+	printf("Size Difference: %d\n\n", sizeDiff);
+	assert(sizeDiff == 3);
 */
-	return 0;
+
+	printf("\n-----Checking size of hand-----\n");
+	printf("Size of hand before adventurer() call: %d\n", oldHand);
+	printf("Size of hand after adventurer() call: %d\n", g->handCount[cp]);
+	sizeDiff = g->handCount[cp] - oldHand;
+	assert(sizeDiff == 2);
+
+	printf("\n-----Checking size of deck-----\n");
+	printf("Size of deck before adventurer() call: %d\n", oldDeck);
+	printf("Size of deck after adventurer() call: %d\n", g->deckCount[cp]);
+	sizeDiff = g->deckCount[cp] - oldDeck;
+	assert(sizeDiff == 2);
 }
 
 int main(){
-	int n;
-	int m;
 	int r;
+	int i;
 	int bonus;
 	int handPos;
 	int gameSeed;
-	int deckCount;
 	int numPlayers;
 	int currentPlayer;
 	int handCountCheck;
 	int deckCountCheck;
-	int numTotalTreasure;
 	int discardCountCheck;
-	int numTreasureAfter = 0;
-	int numTreasureBefore = 0;
+	int treasureCount = 0;
 	int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse, sea_hag, tribute, smithy};
 
 	struct gameState g;
 
 	srand(time(NULL));
 
-
-	for(n = 0; n < TEST_MAX; n++)
-	{
-		printf("\n-*-*-*-*-TEST NUMBER (%d)-*-*-*-*-\n", n + 1);
+	for(i = 0; i < TEST_MAX; i++)
+	{	
+		printf("\n-*-*-*-*-TEST NUMBER (%d)-*-*-*-*-\n", i + 1);
 
 		gameSeed = rand();		//generate a random see to initialize new game
-		numPlayers = rand() % 2;	//pick random number of players, between 0 - MAX_PLAYERS
+		//printf("\nRandom Seed: %d\	n", gameSeed);
+		numPlayers = (rand() % (3 - 1) + 1);	//pick random number of players, between 0 - MAX_PLAYERS
 		bonus = 0;		//for cardEffect() function
 		handPos = rand() % 4; 	//generte random handPos in standard sized hand
-		currentPlayer = rand() % 2;	//pick a random player, based on the number of players from above
+		currentPlayer = (rand() % (3 - 1) + 1);	//pick a random player, based on the number of players from above
 
+/*For Debugging
+		printf("Gameseed: %d\n", gameSeed);
+		printf("Number Players: %d\n", numPlayers);
+		printf("Hand Position: %d\n", handPos);
+		printf("Current Player: %d\n", currentPlayer);
+*/
 
 		initializeGame(numPlayers, k, gameSeed, &g);
 
-		g.handCount[currentPlayer] = (rand() % (5 - 1) + 1);
+		g.handCount[currentPlayer] = rand() % MAX_HAND;
 		g.deckCount[currentPlayer] = rand() % MAX_DECK;
-		g.discardCount[currentPlayer] = rand() % MAX_DECK;
 
 		handCountCheck = g.handCount[currentPlayer];
 		deckCountCheck = g.deckCount[currentPlayer];
-		discardCountCheck = g.discardCount[currentPlayer];
-		numTotalTreasure = rand() % handCountCheck;
-printf("hand size: %d\n", handCountCheck);
-		/* assign arbitrary type of treasure to random number (determined above) of cards in the hand */
-		for(r = 0; r < numTotalTreasure; r++)
-		{
-			g.hand[currentPlayer][r] = gold;	//copper == 4, silver == 5, gold == 6
-		}
-		printf("total treasure: %d\n", numTotalTreasure);
 
-		//numTotalTreasure = handCountCheck;
-
-		/*What should I be comparing? 
-		  The number of treasure cards before and after
-		  The number of cards in the hand before and after
-		  The number of cards in the deck before and after
-		 */
-		for(m = 0; m < handCountCheck; m++)
+/* For Debugging
+		printf("\n----Parameters for Test----\n");
+		printf("Number of Players: %d\n", numPlayers);
+		printf("Hand Position: %d\n", handPos);
+		printf("Current Player; %d\n", currentPlayer);
+		printf("Hand Count: %d\n", handCountCheck);
+		printf("Deck Count: %d\n", deckCountCheck);
+*/
+/*For Debugging
+		printf("old handcount: %d\n", handCountCheck);
+		printf("old deckcount: %d\n", deckCountCheck);
+*/
+		if(deckCountCheck < 3)
 		{
-			printf("treasure %d: %d\n", m, g.hand[currentPlayer][m]);
-			if(g.hand[currentPlayer][m] == 6)	//where 6 is == gold
-			{
-				numTreasureBefore++;
-			}
+			printf("\nNot enough cards to draw\n");
+			shuffle(currentPlayer, &g);
 		}
-		printf("num treasure before: %d\n", numTreasureBefore);
+		else
+		{
 		playAdventurer(currentPlayer, handPos, &g);
-		checkAdventurerCard(currentPlayer, &g, handCountCheck, deckCountCheck, numTreasureBefore);
-
-	}	
+			//cardEffect(smithy, 1, 1, 1, &g, handPos, &bonus);
+			checkAdventurerCard(currentPlayer, &g, handCountCheck, deckCountCheck, treasureCount);
+		}
+	}
 
 	return 0;
 }
-
-
-/* -Check number of treasures in hand before and after. After, there should be two more treasures -
-	for(i = 0; i < 5; i++)
-	{
-		printf("loop %d\n", i);
-		if(hand[i] == copper || hand[i] == gold)
-		{
-			numTreasureBefore++;
-		}
-	}
-	printf("numTreasureBefore: %d\n", numTreasureBefore);	
-
-	
-	hand[3] = gold;
-	hand[4] = copper;
-
-	for(i = 0; i < 5; i++)
-	{
-		printf("loop %d\n", i);
-		if(hand[i] == copper || hand[i] == gold)
-		{
-			numTreasureAfter++;
-		}
-	}	
-*/

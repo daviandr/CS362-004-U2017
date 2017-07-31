@@ -39,11 +39,17 @@ randomtestsmithy.o: randomtestsmithy.c dominion.o rngs.o
 randomtestvillage.o: randomtestvillage.c dominion.o rngs.o
 	gcc -o village randomtestvillage.c dominion.c rngs.c -g -lm $(CFLAGS)
 
+randomtestadventurer.o: randomtestadventurer.c dominion.o rngs.o
+	gcc -o advent randomtestadventurer.c dominion.c rngs.c -g -lm $(CFLAGS)
+
 smithy: randomtestsmithy.o dominion.o rngs.o
 	gcc -o smithy randomtestsmithy.c dominion.c rngs.c -g -lm $(CFLAGS)
 
 village: randomtestvillage.o dominion.o rngs.o
 	gcc -o village randomtestvillage.c dominion.c rngs.c -g -lm $(CFLAGS)
+
+advent: randomtestadventurer.o dominion.o rngs.o
+	gcc -o advent randomtestadventurer.c dominion.c rngs.c -g -lm $(CFLAGS)
 
 randomtestsmithy.out: randomtestsmithy.c dominion.c rngs.c
 	echo "Result for running smithy tests:" > randomtestsmithy.out
