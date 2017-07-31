@@ -1,0 +1,18 @@
+Result for running adventurer tests:
+
+-*-*-*-*-TEST NUMBER (1)-*-*-*-*-
+hand size: 3
+total treasure: 0
+treasure 0: 0
+treasure 1: 0
+treasure 2: 0
+num treasure before: 0
+
+Checking how many treasure cards in hand after card played
+deck count: 0
+Hand count: -1129
+num treasure after: 0
+File 'dominion.c'
+Lines executed:11.41% of 561
+Creating 'dominion.c.gcov'
+

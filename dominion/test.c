@@ -11,7 +11,7 @@
 
 #define TEST_MAX 1
 
-int checkAdventurerCard(int cp, struct gameState *g, int oldHand, int oldDeck){
+int checkAdventurerCard(int cp, struct gameState *g, int oldHand, int oldDeck, int oldTreasure){
 	int sizeDiff;
 
 // For Debugging
@@ -71,6 +71,7 @@ int main(){
 	int handCountCheck;
 	int deckCountCheck;
 	int discardCountCheck;
+	int treasureCount = 0;
 	int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse, sea_hag, tribute, smithy};
 
 	struct gameState g;
@@ -123,7 +124,7 @@ int main(){
 		{
 		playAdventurer(currentPlayer, handPos, &g);
 			//cardEffect(smithy, 1, 1, 1, &g, handPos, &bonus);
-			checkAdventurerCard(currentPlayer, &g, handCountCheck, deckCountCheck);
+			checkAdventurerCard(currentPlayer, &g, handCountCheck, deckCountCheck, treasureCount);
 		}
 	}
 

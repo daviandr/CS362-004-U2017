@@ -61,6 +61,21 @@ int checkSmithyCard(int cp, struct gameState *g, int oldHand, int oldDeck){
 */
 }
 
+int playSmithyCard(int currentPlayer, int handPos, struct gameState *state){
+	int i;
+
+    //+3 Cards
+    for (i = 0; i < 3; i++)
+	{
+	  drawCard(currentPlayer, state);
+	}
+			
+    //discard card from hand
+    discardCard(handPos, currentPlayer, state, 0);
+
+    return 0;
+}
+
 int main(){
 	int i;
 	int bonus;
@@ -103,12 +118,14 @@ int main(){
 		handCountCheck = g.handCount[currentPlayer];
 		deckCountCheck = g.deckCount[currentPlayer];
 
+/*For Debugging
 		printf("\n----Parameters for Test----\n");
 		printf("Number of Players: %d\n", numPlayers);
 		printf("Hand Position: %d\n", handPos);
 		printf("Current Player; %d\n", currentPlayer);
 		printf("Hand Count: %d\n", handCountCheck);
 		printf("Deck Count: %d\n", deckCountCheck);
+*/
 
 /*For Debugging
 		printf("old handcount: %d\n", handCountCheck);
@@ -121,7 +138,7 @@ int main(){
 		}
 		else
 		{
-			playSmithy(currentPlayer, handPos, &g);
+			playSmithyCard(currentPlayer, handPos, &g);
 			//cardEffect(smithy, 1, 1, 1, &g, handPos, &bonus);
 			checkSmithyCard(currentPlayer, &g, handCountCheck, deckCountCheck);
 		}

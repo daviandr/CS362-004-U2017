@@ -45,6 +45,27 @@ smithy: randomtestsmithy.o dominion.o rngs.o
 village: randomtestvillage.o dominion.o rngs.o
 	gcc -o village randomtestvillage.c dominion.c rngs.c -g -lm $(CFLAGS)
 
+randomtestsmithy.out: randomtestsmithy.c dominion.c rngs.c
+	echo "Result for running smithy tests:" > randomtestsmithy.out
+	echo "randomtestsmithy.c" >> randomtestsmithy.out
+	gcc -o smithy dominion.c rngs.c randomtestsmithy.c $(CFLAGS)
+	smithy >> randomtestsmithy.out
+	gcov dominion.c >> randomtestsmithy.out
+
+randomtestvillage.out: randomtestvillage.c dominion.c rngs.c
+	echo "Result for running village tests:" > randometestvillage.out
+	echo "randomtestvillage.c" >> randomtestvillage.out
+	gcc -o village dominion.c rngs.c randomtestvillage.c $(CFLAGS)
+	village >> randomtestvillage.out
+	gcov dominion.c >> randomtestsmithy.out
+
+randomtestadventurer.out: randomtestadventurer.c dominion.c rngs.c
+	echo "Result for running adventurer tests:" > randomtestadventurer.out
+	echo "randomtestadventurer.c" >> randomtestvillage.out
+	gcc -o advent dominion.c rngs.c randomtestadventurer.c $(CFLAGS)
+	advent >> randomtestadventurer.out
+	gcov dominion.c >> randomtestadventurer.out
+
 all: playdom player testDrawCard testBuyCard badTestDrawCard
 
 clean:
