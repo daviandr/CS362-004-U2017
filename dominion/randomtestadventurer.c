@@ -14,13 +14,13 @@
 int checkAdventurerCard(int cp, struct gameState *g, int oldHand, int oldDeck, int oldTreasure){
 	int sizeDiff;
 
-// For Debugging
+/* For Debugging
 	printf("state handsize: %d\n", g->handCount[cp]);
 	printf("state decksize: %d\n", g->deckCount[cp]);
 
 	printf("old handsize: %d\n", oldHand);
 	printf("old decksize: %d\n", oldDeck);
-
+*/
 
 /*
 	printf("\n-----Entering Test-----\n");
@@ -37,16 +37,18 @@ int checkAdventurerCard(int cp, struct gameState *g, int oldHand, int oldDeck, i
 	printf("Size Difference: %d\n\n", sizeDiff);
 	assert(sizeDiff == 3);
 */
-
+/*
 	printf("\n-----Checking size of hand-----\n");
 	printf("Size of hand before adventurer() call: %d\n", oldHand);
 	printf("Size of hand after adventurer() call: %d\n", g->handCount[cp]);
+*/
 	sizeDiff = g->handCount[cp] - oldHand;
 	assert(sizeDiff == 2);
-
+/*
 	printf("\n-----Checking size of deck-----\n");
 	printf("Size of deck before adventurer() call: %d\n", oldDeck);
 	printf("Size of deck after adventurer() call: %d\n", g->deckCount[cp]);
+*/
 	sizeDiff = g->deckCount[cp] - oldDeck;
 	assert(sizeDiff == 2);
 }
@@ -71,7 +73,7 @@ int main(){
 
 	for(i = 0; i < TEST_MAX; i++)
 	{	
-		printf("\n-*-*-*-*-TEST NUMBER (%d)-*-*-*-*-\n", i + 1);
+		//printf("\n-*-*-*-*-TEST NUMBER (%d)-*-*-*-*-\n", i + 1);
 
 		gameSeed = rand();		//generate a random see to initialize new game
 		//printf("\nRandom Seed: %d\	n", gameSeed);
@@ -109,7 +111,7 @@ int main(){
 */
 		if(deckCountCheck < 3)
 		{
-			printf("\nNot enough cards to draw\n");
+			//printf("\nNot enough cards to draw\n");
 			shuffle(currentPlayer, &g);
 		}
 		else

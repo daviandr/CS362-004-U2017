@@ -26,25 +26,32 @@ int checkVillageCard(int currentPlayer, struct gameState *g, int oldHand, int ol
 	printf("old actions: %d\n", numberActions);
 */
 
-	printf("\n-----Entering Check Phase-----\n");
+//	printf("\n-----Entering Check Phase-----\n");
 
 	//first, check hand size. New hand should be +1 than old hand
 	sizeDiff = g->handCount[currentPlayer] - oldHand;
+
+/*
 	printf("After Village Card Hand Count: %d\n", g->handCount[currentPlayer]);
 	printf("Old Hand Count: %d\n", oldHand);
 	printf("Size Difference: %d\n\n", sizeDiff);
+*/
 	assert(sizeDiff == 0);
 	//second, check deck size. New deck should be 1 less than old
 	sizeDiff = oldDeck - g->deckCount[currentPlayer];
+/*
 	printf("After Village Card Deck Count: %d\n", g->deckCount[currentPlayer]);
 	printf("Old Deck Count: %d\n", oldDeck);
 	printf("Size Difference: %d\n\n", sizeDiff);
+*/
 	assert(sizeDiff == 1);
 	//third, check number of actions New actions should be +2 than old actions
 	sizeDiff = g->numActions - oldActions;
+/*
 	printf("After Village Card Action Count: %d\n", g->numActions);
 	printf("Old Action Count: %d\n", oldActions);
 	printf("Size Difference: %d\n\n", sizeDiff);
+*/
 	assert(sizeDiff == 2);
 /*
 	printf("\n-----Entering Test-----\n");
@@ -82,7 +89,7 @@ int main(){
 
 	for(i = 0; i < TEST_MAX; i++)
 	{
-		printf("\n-*-*-*-*-TEST NUMBER (%d)-*-*-*-*-\n", i + 1);
+		//printf("\n-*-*-*-*-TEST NUMBER (%d)-*-*-*-*-\n", i + 1);
 
 		gameSeed = rand();		//generate a random see to initialize new game
 		//printf("\nRandom Seed: %d\	n", gameSeed);

@@ -1,5 +1,4 @@
 /*
-
  */
 
 #include <stdio.h>
@@ -18,24 +17,27 @@ int checkSmithyCard(int cp, struct gameState *g, int oldHand, int oldDeck){
 	printf("state handsize: %d\n", g->handCount[cp]);
 	printf("state decksize: %d\n", g->deckCount[cp]);
 	printf("state discardsize: %d\n", g->discardCount[cp]);
-
 	printf("old handsize: %d\n", oldHand);
 	printf("old decksize: %d\n", oldDeck);
 	printf("old discard: %d\n", oldDiscard);
 */
 
-	printf("\n-----Entering Test-----\n");
+	//printf("\n-----Entering Test-----\n");
 	//First, new handsize(handsize in struct g) should be 2 > than oldHand.
 	sizeDiff = g->handCount[cp] - oldHand;
+/*
 	printf("After Smithy Card Hand Count: %d\n", g->handCount[cp]);
 	printf("Old Hand Count: %d\n", oldHand);
 	printf("Size Difference: %d\n\n", sizeDiff);
+*/
 	assert(sizeDiff == 2);
 	//Second, After Smithy Card decksize(decksize in struct g) should be 3 < than oldDeck.
 	sizeDiff = oldDeck - g->deckCount[cp];
+/*
 	printf("After Smithy Card Deck Count: %d\n", g->deckCount[cp]);
 	printf("Old Deck Count: %d\n", oldDeck);
 	printf("Size Difference: %d\n\n", sizeDiff);
+*/
 	assert(sizeDiff == 3);
 
 
@@ -48,7 +50,6 @@ int checkSmithyCard(int cp, struct gameState *g, int oldHand, int oldDeck){
 		printf("Error: Before should be < after\n");
 		assert(g->handCount[cp] <= oldHand);
 	}
-
 	printf("\n-----Checking size of deck-----\n");
 	printf("Size of deck before smithy() call: %d\n", oldDeck);
 	printf("Size of deck after smithy() call: %d\n", g->deckCount[cp]);
@@ -94,7 +95,7 @@ int main(){
 
 	for(i = 0; i < TEST_MAX; i++)
 	{	
-		printf("\n-*-*-*-*-TEST NUMBER (%d)-*-*-*-*-\n", i + 1);
+		//printf("\n-*-*-*-*-TEST NUMBER (%d)-*-*-*-*-\n", i + 1);
 
 		gameSeed = rand();		//generate a random see to initialize new game
 		//printf("\nRandom Seed: %d\	n", gameSeed);
@@ -133,7 +134,7 @@ int main(){
 */
 		if(deckCountCheck < 3)
 		{
-			printf("\nNot enough cards to draw\n");
+			//printf("\nNot enough cards to draw\n");
 			shuffle(currentPlayer, &g);
 		}
 		else

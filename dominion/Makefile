@@ -33,46 +33,28 @@ runtests: testDrawCard
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
 
-randomtestsmithy.o: randomtestsmithy.c dominion.o rngs.o
-	gcc -o smithy randomtestsmithy.c dominion.c rngs.c -g -lm $(CFLAGS)
+## HW 4 Random Tests
 
-randomtestvillage.o: randomtestvillage.c dominion.o rngs.o
-	gcc -o village randomtestvillage.c dominion.c rngs.c -g -lm $(CFLAGS)
+randomtestsmithy.out: randomtestsmithy.c dominion.o rngs.o
+	gcc -o randomtestsmithy -g -lm randomtestsmithy.c dominion.o rngs.o $(CFLAGS)
+	./randomtestsmithy &>> randomtestsmithy.out
+	gcov -b -c dominion.c >> randomtestsmithy.out
+	cat dominion.c.gcov >> randomtestsmithy.out
 
-randomtestadventurer.o: randomtestadventurer.c dominion.o rngs.o
-	gcc -o advent randomtestadventurer.c dominion.c rngs.c -g -lm $(CFLAGS)
+randomtestvillage.out: randomtestvillage.c dominion.o rngs.o
+	gcc -o randomtestvillage -g -lm randomtestvillage.c dominion.o rngs.o $(CFLAGS)
+	./randomtestvillage &>> randomtestvillage.out
+	gcov -b -c dominion.c >> randomtestvillage.out
+	cat dominion.c.gcov >> randomtestvillage.out
 
-smithy: randomtestsmithy.o dominion.o rngs.o
-	gcc -o smithy randomtestsmithy.c dominion.c rngs.c -g -lm $(CFLAGS)
+randomtestadventurer.out: randomtestadventurer.c dominion.o rngs.o
+	gcc -o randomtestadventurer -g -lm randomtestadventurer.c dominion.o rngs.o $(CFLAGS)
+	./randomtestadventurer &>> randomtestadventurer.out
+	gcov -b -c dominion.c >> randomtestadventurer.out
+	cat dominion.c.gcov >> randomtestadventurer.out
 
-village: randomtestvillage.o dominion.o rngs.o
-	gcc -o village randomtestvillage.c dominion.c rngs.c -g -lm $(CFLAGS)
 
-advent: randomtestadventurer.o dominion.o rngs.o
-	gcc -o advent randomtestadventurer.c dominion.c rngs.c -g -lm $(CFLAGS)
-
-randomtestsmithy.out: randomtestsmithy.c dominion.c rngs.c
-	echo "Result for running smithy tests:" > randomtestsmithy.out
-	echo "randomtestsmithy.c" >> randomtestsmithy.out
-	gcc -o smithy dominion.c rngs.c randomtestsmithy.c $(CFLAGS)
-	smithy >> randomtestsmithy.out
-	gcov dominion.c >> randomtestsmithy.out
-
-randomtestvillage.out: randomtestvillage.c dominion.c rngs.c
-	echo "Result for running village tests:" > randometestvillage.out
-	echo "randomtestvillage.c" >> randomtestvillage.out
-	gcc -o village dominion.c rngs.c randomtestvillage.c $(CFLAGS)
-	village >> randomtestvillage.out
-	gcov dominion.c >> randomtestsmithy.out
-
-randomtestadventurer.out: randomtestadventurer.c dominion.c rngs.c
-	echo "Result for running adventurer tests:" > randomtestadventurer.out
-	echo "randomtestadventurer.c" >> randomtestvillage.out
-	gcc -o advent dominion.c rngs.c randomtestadventurer.c $(CFLAGS)
-	advent >> randomtestadventurer.out
-	gcov dominion.c >> randomtestadventurer.out
-
-all: playdom player testDrawCard testBuyCard badTestDrawCard
+all: playdom player testDrawCard testBuyCard badTestDrawCard randomtestadventurer randomtestsmithy randomtestvillage
 
 clean:
-	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
+	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe randomtestadventurer randomtestsmithy randomtestvillage
