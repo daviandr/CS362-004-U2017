@@ -1,0 +1,37 @@
+Testing wallacon dominion.c file with 2 total tests.
+Test #1: randomtestvillage.c - tests village effect function
+Test #2: randomtestadventurer.c - tests smithy effect funtion
+
+TEST #1-------------------------------------
+Date: 5 August 2017
+Tester: Andrew Davis
+Contact: daviandr@oregonstate.edu
+Platform: Oregon State University FLIP Server
+
+Description: Ran randomtestsmithy.c on dominion.c
+			 Failure on every iteration determining number of Actions available after village card is drawn. 
+			 Error on line 699
+
+Reproduction: "make randomtestsmithy.out" -> view randomsmithy.out file
+
+Expected: Explained in .out file
+
+Given Results: Explained in .out file
+
+TEST #2-------------------------------------
+Date: 5 August 2017
+Tester: Andrew Davis
+Contact: daviandr@oregonstate.edu
+Platform: Oregon State University FLIP Server
+
+Description: Failure on number of cards in hand after adventurer card is drawn.
+		   	 Error on line 654
+
+
+Reproduction: "make randomtestadventurer.out" -> view randomtestadventurer.out file
+
+Expected: Explained in .out file
+
+Given Results: Explained in .out file
+
+
