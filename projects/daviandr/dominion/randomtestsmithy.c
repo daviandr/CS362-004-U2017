@@ -151,7 +151,7 @@ int main(){
 		}
 		else
 		{
-			playSmithyCard(currentPlayer, handPos, &g);
+			playSmithy(currentPlayer, handPos, &g);
 			//cardEffect(smithy, 1, 1, 1, &g, handPos, &bonus);
 			checkSmithyCard(currentPlayer, &g, handCountCheck, deckCountCheck);
 		}

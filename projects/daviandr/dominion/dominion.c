@@ -673,6 +673,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       //+4 Cards
       for (i = 0; i < 4; i++)
 	{
+
 	  drawCard(currentPlayer, state);
 	}
 			
@@ -1342,6 +1343,7 @@ int playSmithy(int currentPlayer, int handPos, struct gameState *state){
 	int i;
 
     //+3 Cards
+  /* originally i <3 */
     for (i = 0; i < 3; i++)
 	{
 	  drawCard(currentPlayer, state);
@@ -1381,8 +1383,8 @@ int playAdventurer(int currentPlayer, struct gameState* state){
     
     while(z-1>=0)
     {
-		state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
-		z=z-1;
+		  state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
+		  z=z-1;
     }
     
     return 0;
